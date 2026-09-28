@@ -48,61 +48,93 @@ class Program
 
     static void RunBinaryToDecimal()
     {
-        Console.Write("Enter an 8-bit binary number: ");
-        string? binaryInput = Console.ReadLine()?.Trim();
+        while (true)
+        {
+            Console.Write("Enter an 8-bit binary number (e.g. 10111011): ");
+            string? input = Console.ReadLine()?.Trim();
 
-        if (binaryInput != null && IsValidBinary(binaryInput))
-        {
-            Console.WriteLine($"{binaryInput} = {BinaryToDecimal(binaryInput)}");
-        }
-        else
-        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return;
+            }
+
+            if (IsValidBinary(input))
+            {
+                Console.WriteLine($"{input} = {BinaryToDecimal(input)}");
+                return;
+            }
+
             Console.WriteLine("Invalid input. Use exactly 8 characters, only 0 and 1.");
+            Console.WriteLine("Try again, or press Enter to go back to the menu.");
         }
     }
 
     static void RunDecimalToBinary()
     {
-        Console.Write("Enter a decimal number (0-255): ");
-        string? decimalInput = Console.ReadLine()?.Trim();
+        while (true)
+        {
+            Console.Write("Enter a decimal number from 0 to 255 (e.g. 187): ");
+            string? input = Console.ReadLine()?.Trim();
 
-        if (decimalInput != null && TryParseOctet(decimalInput, out int number))
-        {
-            Console.WriteLine($"{number} = {DecimalToBinary(number)}");
-        }
-        else
-        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return;
+            }
+
+            if (TryParseOctet(input, out int number))
+            {
+                Console.WriteLine($"{number} = {DecimalToBinary(number)}");
+                return;
+            }
+
             Console.WriteLine("Invalid input. Enter a whole number from 0 to 255.");
+            Console.WriteLine("Try again, or press Enter to go back to the menu.");
         }
     }
 
     static void RunBinaryAddressToDecimal()
     {
-        Console.Write("Enter a binary address (e.g. 10111011.01001011.10101010.01010101): ");
-        string? input = Console.ReadLine()?.Trim();
+        while (true)
+        {
+            Console.Write("Enter a binary address (e.g. 10111011.01001011.10101010.01010101): ");
+            string? input = Console.ReadLine()?.Trim();
 
-        if (input != null && IsValidBinaryAddress(input))
-        {
-            Console.WriteLine($"{input} = {BinaryAddressToDecimal(input)}");
-        }
-        else
-        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return;
+            }
+
+            if (IsValidBinaryAddress(input))
+            {
+                Console.WriteLine($"{input} = {BinaryAddressToDecimal(input)}");
+                return;
+            }
+
             Console.WriteLine("Invalid input. Use 4 groups of 8 binary digits separated by dots.");
+            Console.WriteLine("Try again, or press Enter to go back to the menu.");
         }
     }
 
     static void RunDecimalAddressToBinary()
     {
-        Console.Write("Enter a decimal address (e.g. 187.75.170.85): ");
-        string? input = Console.ReadLine()?.Trim();
+        while (true)
+        {
+            Console.Write("Enter a decimal address (e.g. 187.75.170.85): ");
+            string? input = Console.ReadLine()?.Trim();
 
-        if (input != null && IsValidDecimalAddress(input))
-        {
-            Console.WriteLine($"{input} = {DecimalAddressToBinary(input)}");
-        }
-        else
-        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return;
+            }
+
+            if (IsValidDecimalAddress(input))
+            {
+                Console.WriteLine($"{input} = {DecimalAddressToBinary(input)}");
+                return;
+            }
+
             Console.WriteLine("Invalid input. Use 4 numbers from 0 to 255 separated by dots.");
+            Console.WriteLine("Try again, or press Enter to go back to the menu.");
         }
     }
 
