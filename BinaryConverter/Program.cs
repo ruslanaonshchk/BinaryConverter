@@ -11,9 +11,11 @@ class Program
             Console.WriteLine();
             Console.WriteLine("1. Binary to decimal");
             Console.WriteLine("2. Decimal to binary");
+            Console.WriteLine("3. Binary address to decimal");
+            Console.WriteLine("4. Decimal address to binary");
             Console.WriteLine("0. Exit");
             Console.Write("Choose an option: ");
-            string? choice = Console.ReadLine();
+            string? choice = Console.ReadLine()?.Trim();
 
             if (choice == null || choice == "0")
             {
@@ -27,9 +29,17 @@ class Program
             {
                 RunDecimalToBinary();
             }
+            else if (choice == "3")
+            {
+                RunBinaryAddressToDecimal();
+            }
+            else if (choice == "4")
+            {
+                RunDecimalAddressToBinary();
+            }
             else
             {
-                Console.WriteLine("Invalid choice. Enter 1, 2 or 0.");
+                Console.WriteLine("Invalid choice. Enter 1, 2, 3, 4 or 0.");
             }
         }
 
@@ -39,7 +49,7 @@ class Program
     static void RunBinaryToDecimal()
     {
         Console.Write("Enter an 8-bit binary number: ");
-        string? binaryInput = Console.ReadLine();
+        string? binaryInput = Console.ReadLine()?.Trim();
 
         if (binaryInput != null && IsValidBinary(binaryInput))
         {
@@ -54,7 +64,7 @@ class Program
     static void RunDecimalToBinary()
     {
         Console.Write("Enter a decimal number (0-255): ");
-        string? decimalInput = Console.ReadLine();
+        string? decimalInput = Console.ReadLine()?.Trim();
 
         if (decimalInput != null && TryParseOctet(decimalInput, out int number))
         {
@@ -63,6 +73,36 @@ class Program
         else
         {
             Console.WriteLine("Invalid input. Enter a whole number from 0 to 255.");
+        }
+    }
+
+    static void RunBinaryAddressToDecimal()
+    {
+        Console.Write("Enter a binary address (e.g. 10111011.01001011.10101010.01010101): ");
+        string? input = Console.ReadLine()?.Trim();
+
+        if (input != null && IsValidBinaryAddress(input))
+        {
+            Console.WriteLine($"{input} = {BinaryAddressToDecimal(input)}");
+        }
+        else
+        {
+            Console.WriteLine("Invalid input. Use 4 groups of 8 binary digits separated by dots.");
+        }
+    }
+
+    static void RunDecimalAddressToBinary()
+    {
+        Console.Write("Enter a decimal address (e.g. 187.75.170.85): ");
+        string? input = Console.ReadLine()?.Trim();
+
+        if (input != null && IsValidDecimalAddress(input))
+        {
+            Console.WriteLine($"{input} = {DecimalAddressToBinary(input)}");
+        }
+        else
+        {
+            Console.WriteLine("Invalid input. Use 4 numbers from 0 to 255 separated by dots.");
         }
     }
 
@@ -127,16 +167,103 @@ class Program
 
     static bool TryParseOctet(string text, out int number)
     {
+        number = 0;
+
+        foreach (char character in text)
+        {
+            if (character < '0' || character > '9')
+            {
+                return false;
+            }
+        }
+
         if (!int.TryParse(text, out number))
         {
             return false;
         }
 
-        if (number < 0 || number > 255)
+        if (number > 255)
         {
             return false;
         }
 
         return true;
+    }
+
+    static bool IsValidBinaryAddress(string address)
+    {
+        string[] parts = address.Split('.');
+
+        if (parts.Length != 4)
+        {
+            return false;
+        }
+
+        foreach (string part in parts)
+        {
+            if (!IsValidBinary(part))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    static string BinaryAddressToDecimal(string address)
+    {
+        string[] parts = address.Split('.');
+        string result = "";
+
+        for (int i = 0; i < parts.Length; i++)
+        {
+            result += BinaryToDecimal(parts[i]);
+
+            if (i < parts.Length - 1)
+            {
+                result += ".";
+            }
+        }
+
+        return result;
+    }
+
+    static bool IsValidDecimalAddress(string address)
+    {
+        string[] parts = address.Split('.');
+
+        if (parts.Length != 4)
+        {
+            return false;
+        }
+
+        foreach (string part in parts)
+        {
+            if (!TryParseOctet(part, out _))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    static string DecimalAddressToBinary(string address)
+    {
+        string[] parts = address.Split('.');
+        string result = "";
+
+        for (int i = 0; i < parts.Length; i++)
+        {
+            int number = int.Parse(parts[i]);
+            result += DecimalToBinary(number);
+
+            if (i < parts.Length - 1)
+            {
+                result += ".";
+            }
+        }
+
+        return result;
     }
 }
