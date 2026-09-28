@@ -54,6 +54,7 @@ class Program
     // ask → validate → convert, or show an error and ask again
     static void RunBinaryToDecimal()
     {
+        //because we don't know how many conversions the user wants — break is the only way out.
         while (true)
         {
             Console.Write("Enter an 8-bit binary number (e.g. 10111011): ");
